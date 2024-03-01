@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attenuation Form</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #111;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #eee;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .form-container {
+      background-color: #333;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      margin-right: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border: 1px solid #555;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #111;
+      background-color: #eee;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .table-pane {
+      background-color: #333;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      color: #eee;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #555;
+    }
+
+    th {
+      background-color: #444;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="form-container">
+      <h2>Attenuation Form</h2>
+      <form>
+        <label for="sense">Sense Attenuation:</label>
+        <input type="text" id="sense" name="sense" placeholder="Enter sense attenuation">
+
+        <label for="drive">Drive Attenuation:</label>
+        <input type="text" id="drive" name="drive" placeholder="Enter drive attenuation">
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div class="table-pane">
+      <h2>Attenuation Values</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sense</th>
+            <th>Drive</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td id="VAR-SENSE"></td>
+          <td id="VAR-DRIVE"></td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    var form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        let s_atten = document.getElementById('sense').value;
+        let d_atten = document.getElementById('drive').value;
+        let reqbody = {
+            method: "POST",
+            body: JSON.stringify({
+                s_atten,
+                d_atten
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        };
+        fetch("http://192.168.200.177/", reqbody).then((response) => response.json()).then((data) => {
+            console.log(data);
+        })
+        .catch(console.error);
+    });
+  </script>
+
+</body>
+</html>
+

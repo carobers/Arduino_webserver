@@ -63,20 +63,22 @@ void setup() {
 String mycallback(http_request_t req) {
     JsonDocument datain;
     JsonDocument dataout;
+    String resp = "";
     if (req.path == "/set_atten")
     {
         deserializeJson(datain, req.post_data);
         datten = datain["d_atten"];
         s_atten = datain["s_atten"];
+
+        dataout["d_atten"] = datten;
+        dataout["s_atten"] = s_atten;
+
+        serializeJson(dataout, resp);
+        return resp;
+    } else {
+        return "{\"error\": \"invalid path\"}";
     }
-    
-    String resp = "";
 
-    dataout["d_atten"] = datten;
-    dataout["s_atten"] = s_atten;
-
-    serializeJson(dataout, resp);
-    return resp;
 }
 
 void loop(){

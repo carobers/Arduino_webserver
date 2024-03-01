@@ -83,7 +83,7 @@ http_request_t handle_client_request(EthernetClient client, String (*post_callba
             client.println("HTTP/1.1 200 OK");
             client.println();
             if (post_callback != NULL) {
-                client.println(post_callback(req));
+                client.print(post_callback(req));
             }
             
         }

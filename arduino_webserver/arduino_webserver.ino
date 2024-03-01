@@ -15,6 +15,7 @@
  * https://www.eso.org/~ndelmott/ascii.html
  * https://www.freecodecamp.org/news/javascript-post-request-how-to-send-an-http-post-request-in-js/
  * https://docs.arduino.cc/learn/programming/sd-guide/
+ * https://developer.mozilla.org/en-US/docs/Web/API/Response/json
  * 
  * 
 */
@@ -28,6 +29,8 @@ IPAddress ip(192, 168, 200, 177);
 uint8_t dns[] = {8, 8, 8, 8};
 uint8_t gateway[] = {192, 168, 200, 1};
 uint8_t subnet[] = {255, 255, 255, 0};
+double datten = 0.0;
+double s_atten = 0.0;
 
 EthernetServer server = EthernetServer(80);
 
@@ -58,14 +61,21 @@ void setup() {
 }
 
 String mycallback(http_request_t req) {
+    JsonDocument datain;
+    JsonDocument dataout;
+    if (req.path == "/set_atten")
+    {
+        deserializeJson(datain, req.post_data);
+        datten = datain["d_atten"];
+        s_atten = datain["s_atten"];
+    }
+    
     String resp = "";
-    JsonDocument doc;
-    doc["sensor"] = "gps";
-    doc["time"] = 1351824120;
-    doc["data"][0] = 48.756080;
-    doc["data"][1] = 2.302038;
 
-    serializeJson(doc, resp);
+    dataout["d_atten"] = datten;
+    dataout["s_atten"] = s_atten;
+
+    serializeJson(dataout, resp);
     return resp;
 }
 
@@ -79,7 +89,7 @@ void loop(){
         Serial.println("client connected");
         req = handle_client_request(client, mycallback);
         Serial.println(req.post_data);
-        deserializeJson(doc, req.post_data);
+ 
         client.stop();
         
     }

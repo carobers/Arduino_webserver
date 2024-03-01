@@ -14,6 +14,8 @@ int serve_webpage_from_sdcard(EthernetClient client, String filename) {
     File webpage = SD.open(filename);
     if (!webpage) {
         Serial.println("File not found");
+        client.println("HTTP/1.1 404");
+        client.println();
         return 0;
     }
     char c;

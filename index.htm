@@ -137,8 +137,10 @@
                 "Content-type": "application/json; charset=UTF-8"
             }
         };
-        fetch("http://192.168.200.177/", reqbody).then((response) => response.json()).then((data) => {
+        fetch("http://192.168.200.177/set_atten", reqbody).then((response) => response.json()).then((data) => {
             console.log(data);
+            document.getElementById('VAR-SENSE').innerText = data.s_atten;
+            document.getElementById('VAR-DRIVE').innerText = data.d_atten;
         })
         .catch(console.error);
     });
